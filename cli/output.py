@@ -1,8 +1,10 @@
 """CLI output formatting utilities."""
 
+from datetime import datetime
 import sys
 from typing import Any, Dict, List, Optional
 
+from rich import json
 from rich.console import Console
 from rich.table import Table
 from rich.panel import Panel
@@ -85,3 +87,20 @@ def format_output(data: Any, fmt: str = "table") -> None:
         console.print(Panel(content))
     else:
         console.print(data)
+        
+        
+        
+        
+        
+        
+        
+        
+def json_serializer(obj):
+    """JSON serializer for objects not serializable by default json code."""
+    if isinstance(obj, datetime):
+        return obj.isoformat()
+    raise TypeError(f"Type {type(obj)} not serializable")
+
+def print_json_data(data):
+    """Print data as formatted JSON with proper datetime handling."""
+    console.print_json(data=json.dumps(data, default=json_serializer))

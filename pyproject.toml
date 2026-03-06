@@ -29,7 +29,10 @@ dependencies = [
     "python-dateutil>=2.8.2",
     "tenacity>=8.2.0",
     "numpy",
-    "python-json-logger"
+    "python-json-logger",
+    "asyncpg",
+    "mysql-connector-python",
+    "aiomysql"
 
 ]
 

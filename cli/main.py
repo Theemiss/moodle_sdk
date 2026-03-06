@@ -15,6 +15,11 @@ from cli.commands import (
     logs,
     progress,
     users,
+    content,
+    admin,
+    categories,
+    userfields,
+    sql,
 )
 from config.settings import settings
 from utils.logging import setup_logging
@@ -33,7 +38,11 @@ app.add_typer(grades.app, name="grades", help="Grade management commands")
 app.add_typer(progress.app, name="progress", help="Progress tracking commands")
 app.add_typer(users.app, name="users", help="User management commands")
 app.add_typer(logs.app, name="logs", help="Activity log commands")
-
+app.add_typer(content.app, name="content", help="Course content management commands")
+app.add_typer(admin.app, name="admin", help="System administration commands")
+app.add_typer(categories.app, name="categories", help="Course category management commands")
+app.add_typer(userfields.app, name="userfields", help="Custom user fields management commands")
+app.add_typer(sql.app, name="sql", help="Run custom SQL queries against Moodle database")
 console = Console()
 
 

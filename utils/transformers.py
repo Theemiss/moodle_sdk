@@ -4,6 +4,7 @@ from typing import List, Dict, Any, Optional
 from datetime import datetime
 
 from schemas.course import Course, Section, Module
+from schemas.content import ModuleInfo
 
 
 def transform_course(data: Dict[str, Any]) -> Course:
@@ -162,3 +163,53 @@ def transform_grade_item(item_data: Dict[str, Any]) -> Dict[str, Any]:
                 pass
     
     return item_data
+
+
+
+def transform_module_info(data: Dict[str, Any]) -> ModuleInfo:
+    """
+    Transform raw module data to ModuleInfo model.
+    
+    Args:
+        data: Raw module data from Moodle API
+        
+    Returns:
+        ModuleInfo model instance
+    """
+    from schemas.content import ModuleInfo, ActivityContent
+    
+    # Get course/module data
+    cm = data.get("cm", {})
+    course = data.get("course", {})
+    
+    # Transform contents
+    contents = []
+    for content_data in cm.get("contents", []):
+        content = ActivityContent(
+            type=content_data.get("type", ""),
+            filename=content_data.get("filename", ""),
+            fileurl=content_data.get("fileurl", ""),
+            filesize=content_data.get("filesize", 0),
+            timecreated=content_data.get("timecreated"),
+            timemodified=content_data.get("timemodified"),
+            mimetype=content_data.get("mimetype"),
+            content=content_data.get("content"),
+        )
+        contents.append(content)
+    
+    return ModuleInfo(
+        id=cm.get("id", 0),
+        course_id=course.get("id", 0),
+        name=cm.get("name", ""),
+        modname=cm.get("modname", ""),
+        instance=cm.get("instance", 0),
+        description=cm.get("description", ""),
+        visible=cm.get("visible", 1),
+        section_id=cm.get("section", 0),
+        section_number=data.get("section", {}).get("section", 0),
+        section_name=data.get("section", {}).get("name", ""),
+        completion=cm.get("completion", 0),
+        completionexpected=cm.get("completionexpected"),
+        contents=contents,
+        url=cm.get("url", ""),
+    )
